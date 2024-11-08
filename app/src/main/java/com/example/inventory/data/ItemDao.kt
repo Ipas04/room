@@ -23,21 +23,24 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
-
 @Dao
-interface ItemDao {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(item: Item)
-
-    @Update
-    suspend fun update(item: Item)
-
-    @Delete
-    suspend fun delete(item: Item)
-
-    @Query("SELECT * from items WHERE id = :id")
-    fun getItem(id: Int): Flow<Item>
+interface ItemDao { // DAO item digunakan untuk menambah, memperbarui, menghapus data pada tabel
 
     @Query("SELECT * from items ORDER BY name ASC")
-    fun getAllItems(): Flow<List<Item>>
+    fun getAllItems(): Flow<List<Item>> // maksut dari ini adalah memanggil semua data yang berada pada atribut name dan mengurutkan dari atas ke bawah
+
+    @Query("SELECT * from items WHERE id = :id")
+    fun getItem(id: Int): Flow<Item> // maksut dari ini adalah memanggil semua data yang berada pada atribut id
+
+    // Specify the conflict strategy as IGNORE, when the user tries to add an
+    // existing Item into the database Room ignores the conflict.
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE) //onConflict berfungsi untuk menentukan apa yang harus dilakukan Room ketika ada konflik, jadi maksut tersebut memberitahu Room untuk mengabaikan operasi penyisipan jika data sudah ada.
+    suspend fun insert(item: Item) // anotasi @insert yang digunakan untuk menambah data
+
+    @Update
+    suspend fun update(item: Item) // anotasi @Update yang digunakan untuk memperbarui data
+
+    @Delete
+    suspend fun delete(item: Item) // anotasi @Delete yang digunakan untuk menghapus data
 }

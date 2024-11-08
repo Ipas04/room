@@ -21,22 +21,28 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Item::class], version = 1, exportSchema = false)
+@Database(entities = [Item::class], version = 1, exportSchema = false) //disini sebagai tanda database room dan menentukan entitas yang akan dipakai lalu juga menentuakn versi dan exportschema digunakan untuk tujuan dokumentasi
 abstract class InventoryDatabase : RoomDatabase() {
 
-    abstract fun itemDao(): ItemDao
+    abstract fun itemDao(): ItemDao // Metode ini membrikan InventoryDatabase akses ke ItemDao
 
     companion object {
-        @Volatile
+        @Volatile // memastikan bahwa perubahan nilai Instance langsung terlihat oleh semua threads.
         private var Instance: InventoryDatabase? = null
 
         fun getDatabase(context: Context): InventoryDatabase {
             // if the Instance is not null, return it, otherwise create a new database instance.
             return Instance ?: synchronized(this) {
-                Room.databaseBuilder(context, InventoryDatabase::class.java, "item_database")
-                    .build().also { Instance = it }
+                Room.databaseBuilder(context, InventoryDatabase::class.java, "item_database") // room.databasebuilder membuat database Room baru atau mengembalikan database yang sudah ada.
+                    /**
+                     * Setting this option in your app's database builder means that Room
+                     * permanently deletes all data from the tables in your database when it
+                     * attempts to perform a migration with no defined migration path.
+                     */
+                    .fallbackToDestructiveMigration() // Menyebabkan Room menghapus dan membuat ulang database jika terjadi konflik migrasi.
+                    .build()
+                    .also { Instance = it }
             }
         }
     }
 }
-

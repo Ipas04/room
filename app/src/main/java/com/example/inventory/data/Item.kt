@@ -23,10 +23,11 @@ import androidx.room.PrimaryKey
  * Entity data class represents a single row in the database.
  */
 @Entity(tableName = "items")
-data class Item(
+data class Item( //salah satu komponen room yaitu membuat entitas atau tabel untuk menyimpan data, pada entitas ini memiliki atribut seperti dibawah
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
-    val name: String,
-    val price: Double,
-    val quantity: Int
+    val id: Int = 0, // atribut ini sebagai primary key yang memiliki tipe data integer
+    val name: String, // atribut ini menggunakan tipe data string untuk menyimpan data nama-nama barang
+    val price: Double, // atribut ini menggunakan tipe data double untuk menyimpan data harga barang
+    val quantity: Int // atribut ini menggunakan tipe data integer untuk menyimpan data jumlah barang
 )
+// setelah membuat entitas sellanjutnya membuat DAO untuk melakukan penambahan, memperbarui, menghapus dll pada data
